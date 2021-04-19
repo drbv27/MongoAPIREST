@@ -17,7 +17,14 @@ app.get('/api/product', (req,res) => {
 })
 
 app.get('/api/product/:productId', (req,res) => {
-    
+    let productId = req.params.productId
+
+    Product.findById(productId, (err, product) =>{
+        if (err) return res.status(500).send({message: `Error al realizar la peticion: ${err}`})
+        if (!product) return res.status(404).send({message: `El producto no existe`})
+
+        res.status(200).send({product: product})
+    })
 })
 
 app.post('/api/product', (req, res) => {
