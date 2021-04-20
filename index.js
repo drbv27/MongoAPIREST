@@ -54,8 +54,17 @@ app.put('/api/product/:productId', (req,res) => {
 
 })
 
-app.delete('/api/product/productId', (req, res) => {
+app.delete('/api/product/:productId', (req, res) => {
+    let productId = req.params.productId
 
+    Product.findById(productId, (err, product) =>{
+        if (err) res.status(500).send({message: `Error al borrar el producto: ${err}`})
+
+        product.remove(err => {
+            if (err) res.status(500).send({message: `Error al borrar el producto: ${err}`})
+            res.status(200).send({message: `El producto ha sido eliminado`})
+        })
+    })
 })
 
 mongoose.connect('mongodb://localhost:27017/shopi',{ useNewUrlParser: true, useUnifiedTopology: true }, (err, res) => {
