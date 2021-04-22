@@ -6,7 +6,8 @@ const config = require('../config')
 
 function createToken (user) {
     const payload = {
-        sub: use._id,
+        sub: user._id,
+        username: user.displayName,
         iat: moment().unix(),
         exp: moment().add(1, 'year').unix(),
     }
@@ -16,7 +17,7 @@ function createToken (user) {
 
 function decodeToken (token) {
     const decoded = new Promise((resolve, reject) => {
-        try{
+        try {
             const payload = jwt.decode(token, config.SECRET_TOKEN)
 
             if (payload.exp <= moment().unix()) {
